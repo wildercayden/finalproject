@@ -15,6 +15,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.Calendar;
 import java.util.List;
 
 import java.text.SimpleDateFormat;
@@ -48,7 +49,11 @@ public class SetupActivity extends AppCompatActivity {
             if (firstSelectedDate == 0) {
                 // Store the previous first date before updating
                 previousFirstDate = firstSelectedDate;
-                firstSelectedDate = calendarView.getDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth, 0, 0, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                firstSelectedDate = calendar.getTimeInMillis();
+
                 Toast.makeText(this, "First date selected", Toast.LENGTH_SHORT).show();
                 TextView2.setText("Now select the last day of school");
                 TextView2.setTypeface(null, Typeface.BOLD);
@@ -90,8 +95,8 @@ public class SetupActivity extends AppCompatActivity {
                 } else {
                     // Insert into Room
                     new Thread(() -> {
-                        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "dates-db")
-                                .build();
+                        AppDatabase db = DatabaseClient.getInstance(getApplicationContext()).getDatabase();
+
 
                         DateRange range = new DateRange(firstString, lastString);
                         db.dateRangeDao().insert(range);
