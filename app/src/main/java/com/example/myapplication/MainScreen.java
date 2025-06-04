@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +22,10 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainscreen);
-
+        Button nextButton = findViewById(R.id.HomeWork);
+        nextButton.setOnClickListener(view -> {
+            makeIntent();
+                });
         textView = findViewById(R.id.Schooldays);
 
         new Thread(() -> {
@@ -89,6 +94,11 @@ public class MainScreen extends AppCompatActivity {
         }).start();
     }
 
+    private void makeIntent () {
+        Intent intent = new Intent(MainScreen.this, HomeWork.class);
+        startActivity(intent);
+    }
+
     private Date truncateTime(Date date) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,5 +108,6 @@ public class MainScreen extends AppCompatActivity {
             e.printStackTrace();
             return date;
         }
+
     }
 }
